@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <div class="form-card">
+      <h2 style="margin-top:0;">Welcome back</h2>
+      <p class="muted">Log in to track orders, save your cart, and leave reviews.</p>
+      <div id="login-error"></div>
+      <form id="login-form">
+        <div class="field"><label>Email</label><input type="email" id="email" required></div>
+        <div class="field"><label>Password</label><input type="password" id="password" required></div>
+        <button class="btn btn-primary btn-block" type="submit">Log in</button>
+      </form>
+      <p class="muted" style="margin-top:16px; text-align:center;">New here? <a href="register.html" style="font-weight:600; color:var(--forest); text-decoration:underline;">Create an account</a></p>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script>
+  renderHeader("");
+  renderFooter();
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById("login-error");
+    try {
+      const data = await api.login({
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value
+      });
+      auth.setSession(data.token, data.user);
+      const next = new URLSearchParams(location.search).get("next");
+      location.href = next || (data.user.role === "farmer" ? "farmer-dashboard.html" : data.user.role === "admin" ? "admin.html" : "account.html");
+    } catch (err) {
+      errEl.innerHTML = `<div class="form-error">${err.message}</div>`;
+    }
+  });
+</script>
+</body>
+</html>

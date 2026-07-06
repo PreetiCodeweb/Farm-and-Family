@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Account — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <div id="account-root"><p class="skeleton-text">Loading your account…</p></div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script>
+  renderHeader("");
+  renderFooter();
+  const root = document.getElementById("account-root");
+  const STAGES = ["placed", "confirmed", "packed", "out_for_delivery", "delivered"];
+  const highlightOrderId = new URLSearchParams(location.search).get("order");
+
+  function statusTrack(status) {
+    const idx = STAGES.indexOf(status);
+    return `<div class="status-track">${STAGES.map((s, i) => `<div class="seg ${i <= idx ? "done" : ""}"></div>`).join("")}</div>
+      <div class="muted" style="font-size:0.8rem; text-transform:capitalize;">${status.replace(/_/g, " ")}</div>`;
+  }
+
+  async function init() {
+    if (!auth.isLoggedIn()) {
+      root.innerHTML = `<div class="form-card" style="margin:0;"><p>Please log in to view your account.</p><a href="login.html?next=account.html" class="btn btn-primary btn-block">Log in</a></div>`;
+      return;
+    }
+    const user = auth.getUser();
+    let orders = [];
+    try { orders = await api.myOrders(); } catch (e) { /* ignore */ }
+
+    root.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <span class="eyebrow">Account</span>
+          <h1 style="margin-top:4px;">Hi, ${user.name.split(" ")[0]}</h1>
+          <p class="muted">${user.email} · ${user.role}</p>
+        </div>
+        <button class="btn btn-ghost" id="logout-btn">Log out</button>
+      </div>
+
+      <h3 style="margin-top:40px;">Your orders</h3>
+      <div id="orders-list">
+        ${orders.length ? orders.map((o) => `
+          <div class="card" style="padding:20px; margin-bottom:16px; ${o.id === highlightOrderId ? "border-color:var(--turmeric);" : ""}">
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+              <div>
+                <strong>Order ${o.id}</strong>
+                <div class="muted" style="font-size:0.85rem;">Placed ${new Date(o.placedAt).toLocaleDateString("en-IN")} · Est. delivery ${o.estimatedDelivery}</div>
+              </div>
+              <strong>${money(o.total)}</strong>
+            </div>
+            ${statusTrack(o.status)}
+            <div class="muted" style="font-size:0.85rem;">${o.items.map((i) => `${i.name} × ${i.quantity}`).join(", ")}</div>
+          </div>
+        `).join("") : `<div class="empty-state">No orders yet. <a href="shop.html" class="tag-link" style="font-weight:600;">Start shopping →</a></div>`}
+      </div>
+    `;
+
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      auth.clearSession();
+      location.href = "index.html";
+    });
+  }
+  init();
+</script>
+</body>
+</html>

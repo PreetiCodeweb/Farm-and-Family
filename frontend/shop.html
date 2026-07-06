@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop All Products — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">The full harvest</span><h2>Shop All Products</h2></div>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+      <input type="text" id="search-input" placeholder="Search products, e.g. turmeric, oil, atta…" style="flex:1; min-width:220px; padding:12px 16px; border-radius:999px; border:1px solid var(--line); font-family:inherit;">
+      <select id="sort-select" style="padding:12px 16px; border-radius:999px; border:1px solid var(--line); font-family:inherit;">
+        <option value="">Sort: Featured</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+        <option value="newest">Freshest First</option>
+      </select>
+    </div>
+
+    <div class="filter-bar" id="category-filters"></div>
+    <label style="display:inline-flex; align-items:center; gap:8px; margin-bottom:24px; font-size:0.9rem;">
+      <input type="checkbox" id="fresh-toggle"> Farm Fresh Today only
+    </label>
+
+    <div class="product-grid" id="product-grid">
+      <p class="skeleton-text">Loading products…</p>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/render.js"></script>
+<script>
+  renderHeader("shop.html");
+  renderFooter();
+
+  const params = new URLSearchParams(location.search);
+  let state = {
+    category: params.get("category") || "",
+    q: "",
+    farmFreshToday: params.get("fresh") === "true",
+    sort: ""
+  };
+
+  document.getElementById("fresh-toggle").checked = state.farmFreshToday;
+
+  async function loadCategoryFilters() {
+    const bar = document.getElementById("category-filters");
+    try {
+      const categories = await api.getCategories();
+      const renderPills = () => {
+        bar.innerHTML =
+          `<a href="#" class="pill-filter ${!state.category ? "active" : ""}" data-slug="">All</a>` +
+          categories.map((c) => `<a href="#" class="pill-filter ${state.category === c.slug ? "active" : ""}" data-slug="${c.slug}">${c.icon} ${c.name}</a>`).join("");
+        bar.querySelectorAll(".pill-filter").forEach((el) => {
+          el.addEventListener("click", (e) => {
+            e.preventDefault();
+            state.category = el.dataset.slug;
+            renderPills();
+            loadProducts();
+          });
+        });
+      };
+      renderPills();
+    } catch (e) {
+      bar.innerHTML = "";
+    }
+  }
+
+  async function loadProducts() {
+    const grid = document.getElementById("product-grid");
+    grid.innerHTML = `<p class="skeleton-text">Loading products…</p>`;
+    const query = {};
+    if (state.category) query.category = state.category;
+    if (state.q) query.q = state.q;
+    if (state.farmFreshToday) query.farmFreshToday = "true";
+    if (state.sort) query.sort = state.sort;
+    try {
+      const { products, count } = await api.getProducts(query);
+      grid.innerHTML = count
+        ? products.map(productCardHtml).join("")
+        : `<div class="empty-state" style="grid-column:1/-1;">No products match those filters yet. Try clearing a filter.</div>`;
+    } catch (e) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Couldn't load products. Is the API server running?</div>`;
+    }
+  }
+
+  document.getElementById("search-input").addEventListener("input", (e) => {
+    state.q = e.target.value.trim();
+    clearTimeout(window._searchDebounce);
+    window._searchDebounce = setTimeout(loadProducts, 300);
+  });
+  document.getElementById("sort-select").addEventListener("change", (e) => {
+    state.sort = e.target.value;
+    loadProducts();
+  });
+  document.getElementById("fresh-toggle").addEventListener("change", (e) => {
+    state.farmFreshToday = e.target.checked;
+    loadProducts();
+  });
+
+  loadCategoryFilters();
+  loadProducts();
+</script>
+</body>
+</html>

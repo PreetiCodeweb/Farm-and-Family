@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <span class="eyebrow">Internal</span>
+    <h1>Admin Overview</h1>
+    <div id="admin-root"><p class="skeleton-text">Loading…</p></div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script>
+  renderHeader("");
+  renderFooter();
+  const root = document.getElementById("admin-root");
+
+  async function init() {
+    const user = auth.getUser();
+    if (!auth.isLoggedIn() || !user || user.role !== "admin") {
+      root.innerHTML = `<div class="form-card" style="margin:0;"><p>Admin access only. Log in with an admin account.</p><a href="login.html" class="btn btn-primary btn-block">Log in</a></div>`;
+      return;
+    }
+    try {
+      const [{ products }, farmers, inquiries] = await Promise.all([
+        api.getProducts({}),
+        api.getFarmers(),
+        fetch("/api/wholesale/inquiries").then((r) => r.json())
+      ]);
+
+      root.innerHTML = `
+        <div class="trust-strip" style="margin:24px 0;">
+          <div class="trust-item"><h4>Products</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--forest);">${products.length}</p></div>
+          <div class="trust-item"><h4>Farmers</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--forest);">${farmers.length}</p></div>
+          <div class="trust-item"><h4>Wholesale leads</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--forest);">${inquiries.length}</p></div>
+          <div class="trust-item"><h4>Low stock (&lt;15)</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--danger);">${products.filter((p) => p.stock < 15).length}</p></div>
+        </div>
+
+        <h3>Inventory</h3>
+        <table class="plain">
+          <tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Farm Fresh?</th></tr>
+          ${products.map((p) => `<tr><td>${p.name}</td><td>${p.category ? p.category.name : ""}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${p.farmFreshToday ? "✅" : "—"}</td></tr>`).join("")}
+        </table>
+
+        <h3 style="margin-top:40px;">Wholesale inquiries</h3>
+        <table class="plain">
+          <tr><th>Business</th><th>Contact</th><th>Type</th><th>Email</th><th>Received</th></tr>
+          ${inquiries.length ? inquiries.map((i) => `<tr><td>${i.businessName}</td><td>${i.contactName}</td><td>${i.businessType}</td><td>${i.email}</td><td>${new Date(i.createdAt).toLocaleDateString("en-IN")}</td></tr>`).join("") : `<tr><td colspan="5" class="muted">No inquiries yet.</td></tr>`}
+        </table>
+      `;
+    } catch (e) {
+      root.innerHTML = `<div class="empty-state">Couldn't load admin data.</div>`;
+    }
+  }
+  init();
+</script>
+</body>
+</html>

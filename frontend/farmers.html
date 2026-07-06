@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meet Our Farmers — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <span class="eyebrow">The people behind every harvest</span>
+    <h1>Meet Our Farmers</h1>
+    <p class="lead muted" style="max-width:60ch;">Every product on Farm &amp; Family is grown by a real, verified farmer. Here are some of the people whose land, hands, and generations of knowledge make it possible.</p>
+    <div class="farmer-grid" style="margin-top:36px;" id="farmer-grid">
+      <p class="skeleton-text">Loading farmer profiles…</p>
+    </div>
+
+    <div class="trace-feature" style="margin-top:70px;">
+      <div>
+        <span class="eyebrow">Are you a farmer?</span>
+        <h2>Join the Farm &amp; Family network</h2>
+        <p>Register, get verified, and start selling directly to families across India — with logistics, marketing, and quality assurance handled for you.</p>
+        <a href="register.html?role=farmer" class="btn btn-accent">Apply as a farmer</a>
+      </div>
+      <div class="passport" style="background:var(--cream);">
+        <div class="stamp-title"><span>Farmer Onboarding</span><span class="rotated">4 Steps</span></div>
+        <div class="perf"></div>
+        <dl>
+          <dt>1.</dt><dd>Register &amp; verify identity</dd>
+          <dt>2.</dt><dd>List your first products</dd>
+          <dt>3.</dt><dd>We handle logistics &amp; QA</dd>
+          <dt>4.</dt><dd>Get paid, track earnings</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/render.js"></script>
+<script>
+  renderHeader("farmers.html");
+  renderFooter();
+  (async function () {
+    const grid = document.getElementById("farmer-grid");
+    try {
+      const farmers = await api.getFarmers();
+      grid.innerHTML = farmers.map(farmerCardHtml).join("");
+    } catch (e) {
+      grid.innerHTML = `<p class="skeleton-text">Couldn't load farmer profiles.</p>`;
+    }
+  })();
+</script>
+</body>
+</html>

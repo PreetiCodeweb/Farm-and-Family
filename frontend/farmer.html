@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Farmer Profile — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section" id="farmer-root">
+  <div class="container"><p class="skeleton-text">Loading farmer profile…</p></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/render.js"></script>
+<script>
+  renderHeader("farmers.html");
+  renderFooter();
+  const id = new URLSearchParams(location.search).get("id");
+  const root = document.getElementById("farmer-root");
+
+  async function load() {
+    if (!id) { root.innerHTML = `<div class="container empty-state">No farmer specified.</div>`; return; }
+    try {
+      const f = await api.getFarmer(id);
+      document.getElementById("page-title").textContent = `${f.name} — Farm & Family`;
+      const initials = f.name.split(" ").map((n) => n[0]).join("").slice(0, 2);
+      root.innerHTML = `
+        <div class="container">
+          <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+            <div class="avatar" style="width:84px; height:84px; font-size:1.8rem;">${initials}</div>
+            <div>
+              <span class="eyebrow">${f.village}, ${f.state}</span>
+              <h1 style="margin-top:4px;">${f.name}</h1>
+              <div class="muted">★ ${f.rating} · ${f.yearsFarming} years farming · ${f.totalOrders}+ orders fulfilled</div>
+            </div>
+          </div>
+
+          <div class="two-col" style="margin-top:36px;">
+            <div>
+              <h3>Their story</h3>
+              <p class="muted">${f.story}</p>
+              <h3 style="margin-top:24px;">Specialties</h3>
+              <div class="chip-row">${f.specialties.map((s) => `<span class="chip">${s}</span>`).join("")}</div>
+              <h3 style="margin-top:24px;">Certifications</h3>
+              <div class="chip-row">${f.certifications.map((c) => `<span class="chip">${c}</span>`).join("")}</div>
+            </div>
+            <div class="passport">
+              <div class="stamp-title"><span>Farmer Verification</span><span class="rotated">Verified</span></div>
+              <div class="perf"></div>
+              <dl>
+                <dt>Name</dt><dd>${f.name}</dd>
+                <dt>Village</dt><dd>${f.village}</dd>
+                <dt>State</dt><dd>${f.state}</dd>
+                <dt>Since</dt><dd>${f.yearsFarming} years</dd>
+                <dt>Rating</dt><dd>${f.rating} / 5</dd>
+              </dl>
+            </div>
+          </div>
+
+          <div style="margin-top:50px;">
+            <h3>Products from ${f.name}</h3>
+            <div class="product-grid" style="margin-top:20px;">
+              ${(f.products || []).map(productCardHtml).join("") || `<p class="muted">No products listed yet.</p>`}
+            </div>
+          </div>
+        </div>
+      `;
+    } catch (e) {
+      root.innerHTML = `<div class="container empty-state">Farmer not found.</div>`;
+    }
+  }
+  load();
+</script>
+</body>
+</html>

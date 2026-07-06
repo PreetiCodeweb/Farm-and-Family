@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Journey — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section" id="trace-root">
+  <div class="container"><p class="skeleton-text">Loading this product's journey…</p></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/render.js"></script>
+<script>
+  renderHeader("shop.html");
+  renderFooter();
+
+  const id = new URLSearchParams(location.search).get("id");
+  const root = document.getElementById("trace-root");
+
+  async function load() {
+    if (!id) { root.innerHTML = `<div class="container empty-state">No product specified.</div>`; return; }
+    try {
+      const data = await api.getTrace(id);
+      const f = data.farmer;
+      root.innerHTML = `
+        <div class="container">
+          <span class="eyebrow">Harvest Passport — Full Journey</span>
+          <h1>${data.product.name}</h1>
+          <p class="muted">This is what scanning the QR code on the box shows: the exact farm, the farmer, and every step from soil to your door.</p>
+
+          <div class="two-col" style="margin-top:36px; align-items:flex-start;">
+            <div>
+              <h3>Journey timeline</h3>
+              <div class="timeline">
+                ${data.timeline.map((ev) => `
+                  <div class="timeline-item">
+                    <div class="stage">${ev.stage}</div>
+                    <div class="date">${ev.date} · ${ev.location}</div>
+                    <p class="muted" style="margin-top:4px;">${ev.note}</p>
+                  </div>
+                `).join("") || `<p class="muted">Detailed timeline coming soon for this product.</p>`}
+              </div>
+            </div>
+            <div>
+              <div class="passport">
+                <div class="stamp-title"><span>Harvest Passport · #${data.product.id.toUpperCase()}</span><span class="rotated">Verified</span></div>
+                <div class="perf"></div>
+                <dl>
+                  <dt>Farmer</dt><dd>${f ? f.name : "—"}</dd>
+                  <dt>Village</dt><dd>${f ? `${f.village}, ${f.state}` : "—"}</dd>
+                  <dt>Years farming</dt><dd>${f ? f.yearsFarming : "—"}</dd>
+                  <dt>Harvested</dt><dd>${data.product.harvestedOn}</dd>
+                  <dt>Method</dt><dd>${data.cultivationMethod}</dd>
+                  <dt>Certified</dt><dd>${(data.qualityCertifications || []).join(", ") || "—"}</dd>
+                </dl>
+              </div>
+              ${f ? `
+                <div class="farmer-card card" style="margin-top:20px;">
+                  <h4>About ${f.name}</h4>
+                  <p class="muted">${f.story}</p>
+                  <a href="farmer.html?id=${f.id}" class="tag-link" style="font-weight:600;">View full farmer profile →</a>
+                </div>
+              ` : ""}
+            </div>
+          </div>
+
+          <div style="margin-top:40px;">
+            <a href="product.html?id=${data.product.id}" class="btn btn-outline">← Back to product</a>
+          </div>
+        </div>
+      `;
+    } catch (e) {
+      root.innerHTML = `<div class="container empty-state">Couldn't load this product's journey.</div>`;
+    }
+  }
+  load();
+</script>
+</body>
+</html>

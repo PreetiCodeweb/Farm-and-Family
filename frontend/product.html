@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Product — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section" id="product-root">
+  <div class="container">
+    <p class="skeleton-text">Loading product…</p>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/render.js"></script>
+<script>
+  renderHeader("shop.html");
+  renderFooter();
+
+  const id = new URLSearchParams(location.search).get("id");
+  const root = document.getElementById("product-root");
+
+  function starRow(rating) {
+    const full = Math.round(rating);
+    return "★".repeat(full) + "☆".repeat(5 - full);
+  }
+
+  async function load() {
+    if (!id) { root.innerHTML = `<div class="container empty-state">No product selected.</div>`; return; }
+    try {
+      const p = await api.getProduct(id);
+      document.getElementById("page-title").textContent = `${p.name} — Farm & Family`;
+      const icon = CATEGORY_ICONS[p.category ? p.category.slug : ""] || "🌾";
+
+      root.innerHTML = `
+        <div class="container">
+          <div class="two-col" style="align-items:flex-start;">
+            <div>
+              <div class="card-media" style="border-radius: var(--radius); aspect-ratio:1/1;">
+                ${p.farmFreshToday ? `<span class="badge fresh">Farm Fresh Today</span>` : `<span class="badge">${timeAgoLabel(p.harvestedOn)}</span>`}
+                <span style="font-size:5rem;">${icon}</span>
+              </div>
+            </div>
+            <div>
+              <span class="eyebrow">${p.category ? p.category.name : ""}</span>
+              <h1 style="margin-top:6px;">${p.name}</h1>
+              <div class="muted" style="margin-bottom:10px;">${starRow(p.rating)} &nbsp;${p.rating} (${p.reviewCount} reviews)</div>
+              <p class="lead" style="color:var(--ink-soft); font-size:1.05rem;">${p.shortDescription}</p>
+              <div style="display:flex; align-items:center; gap:16px; margin:20px 0;">
+                <span class="price" style="font-size:1.7rem;">${money(p.price)} <span class="unit">/ ${p.unit}</span></span>
+                <span class="muted">${p.stock} in stock</span>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center; margin-bottom:26px;">
+                <div class="qty-control">
+                  <button type="button" id="qty-minus">−</button>
+                  <span id="qty-value">1</span>
+                  <button type="button" id="qty-plus">+</button>
+                </div>
+                <button class="btn btn-primary" id="add-to-cart-btn">Add to cart</button>
+                <a href="wholesale.html?product=${p.id}" class="btn btn-ghost btn-sm">Bulk / Wholesale pricing</a>
+              </div>
+
+              ${passportHtml(p, p.farmer)}
+              <a href="trace.html?id=${p.id}" class="btn btn-outline btn-sm" style="margin-top:14px;">📷 Scan Harvest Passport — see full farm journey →</a>
+
+              ${p.farmer ? `<p style="margin-top:20px;"><a href="farmer.html?id=${p.farmer.id}" class="tag-link" style="font-weight:600; color:var(--forest); border-bottom:1px solid var(--turmeric);">Grown by ${p.farmer.name}, ${p.farmer.village} →</a></p>` : ""}
+            </div>
+          </div>
+
+          <div class="two-col" style="margin-top:60px;">
+            <div>
+              <h3>Description</h3>
+              <p class="muted">${p.description}</p>
+              <h3 style="margin-top:24px;">Storage instructions</h3>
+              <p class="muted">${p.storageInstructions}</p>
+            </div>
+            <div>
+              ${p.nutrition ? `
+                <h3>Nutrition (approx. per 100g)</h3>
+                <table class="plain">
+                  ${Object.entries(p.nutrition).map(([k, v]) => `<tr><th>${k.replace(/_/g, " ")}</th><td>${v}</td></tr>`).join("")}
+                </table>
+              ` : ""}
+              <h3 style="margin-top:24px;">Quality certifications</h3>
+              <div class="chip-row">${(p.qualityCertifications || []).map((c) => `<span class="chip">${c}</span>`).join("") || "<span class='muted'>None listed</span>"}</div>
+            </div>
+          </div>
+
+          <div style="margin-top:60px;">
+            <h3>Customer reviews</h3>
+            <div id="reviews-list">
+              ${(p.reviews && p.reviews.length ? p.reviews : []).map((r) => `
+                <div style="padding:14px 0; border-bottom:1px solid var(--line);">
+                  <strong>${r.user}</strong> <span style="color:var(--turmeric);">${starRow(r.rating)}</span>
+                  <p class="muted" style="margin:4px 0 0;">${r.comment}</p>
+                </div>
+              `).join("") || `<p class="muted">No reviews yet — be the first.</p>`}
+            </div>
+
+            <div class="form-card" style="margin:24px 0 0; max-width:100%;">
+              <h4 style="margin-top:0;">Write a review</h4>
+              <div id="review-message"></div>
+              <div class="field">
+                <label>Rating</label>
+                <select id="review-rating">
+                  <option value="5">★★★★★</option>
+                  <option value="4">★★★★☆</option>
+                  <option value="3">★★★☆☆</option>
+                  <option value="2">★★☆☆☆</option>
+                  <option value="1">★☆☆☆☆</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Comment</label>
+                <textarea id="review-comment" rows="3" placeholder="How was it?"></textarea>
+              </div>
+              <button class="btn btn-primary" id="submit-review">Submit review</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      let qty = 1;
+      document.getElementById("qty-minus").addEventListener("click", () => { qty = Math.max(1, qty - 1); document.getElementById("qty-value").textContent = qty; });
+      document.getElementById("qty-plus").addEventListener("click", () => { qty = Math.min(p.stock, qty + 1); document.getElementById("qty-value").textContent = qty; });
+      document.getElementById("add-to-cart-btn").addEventListener("click", async (e) => {
+        e.target.textContent = "Adding…";
+        try {
+          await api.addToCart(auth.cartOwnerId(), p.id, qty);
+          await refreshCartBadge();
+          e.target.textContent = "Added ✓";
+          setTimeout(() => (e.target.textContent = "Add to cart"), 1200);
+        } catch (err) {
+          e.target.textContent = "Error — try again";
+        }
+      });
+
+      document.getElementById("submit-review").addEventListener("click", async () => {
+        const msgEl = document.getElementById("review-message");
+        if (!auth.isLoggedIn()) {
+          msgEl.innerHTML = `<div class="form-error">Please <a href="login.html" style="text-decoration:underline;">log in</a> to leave a review.</div>`;
+          return;
+        }
+        const rating = Number(document.getElementById("review-rating").value);
+        const comment = document.getElementById("review-comment").value.trim();
+        try {
+          await api.postReview(p.id, { rating, comment });
+          msgEl.innerHTML = `<div class="form-success">Thanks for your review!</div>`;
+          document.getElementById("review-comment").value = "";
+        } catch (err) {
+          msgEl.innerHTML = `<div class="form-error">${err.message}</div>`;
+        }
+      });
+    } catch (e) {
+      root.innerHTML = `<div class="container empty-state">Product not found.</div>`;
+    }
+  }
+
+  load();
+</script>
+</body>
+</html>

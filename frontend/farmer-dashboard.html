@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmer Dashboard — Farm &amp; Family</title>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="section">
+  <div class="container">
+    <div id="dash-root"><p class="skeleton-text">Loading dashboard…</p></div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/layout.js"></script>
+<script>
+  renderHeader("");
+  renderFooter();
+  const root = document.getElementById("dash-root");
+
+  async function init() {
+    const user = auth.getUser();
+    if (!auth.isLoggedIn() || !user || (user.role !== "farmer" && user.role !== "admin")) {
+      root.innerHTML = `<div class="form-card" style="margin:0;"><p>This dashboard is for verified farmer accounts.</p><a href="login.html" class="btn btn-primary btn-block">Log in as a farmer</a></div>`;
+      return;
+    }
+    try {
+      // Demo note: in this seeded dataset farmer accounts aren't pre-linked to a
+      // specific farmer profile id, so we default to showing farmer "f1" (Ramesh
+      // Patil) as a demonstration of the dashboard a real farmer would see.
+      const farmerId = new URLSearchParams(location.search).get("farmerId") || "f1";
+      const data = await api.getFarmerDashboard(farmerId);
+      root.innerHTML = `
+        <span class="eyebrow">Farmer Dashboard</span>
+        <h1>${data.farmer.name}'s Dashboard</h1>
+        <div class="trust-strip" style="margin:24px 0;">
+          <div class="trust-item"><h4>Total orders</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--forest);">${data.totalOrders}</p></div>
+          <div class="trust-item"><h4>Estimated earnings</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--forest);">${money(data.estimatedEarnings)}</p></div>
+          <div class="trust-item"><h4>Products listed</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--forest);">${data.products.length}</p></div>
+          <div class="trust-item"><h4>Low stock alerts</h4><p style="font-size:1.6rem; font-family:var(--font-display); color:var(--danger);">${data.lowStockProducts.length}</p></div>
+        </div>
+
+        <h3>Your products</h3>
+        <table class="plain">
+          <tr><th>Product</th><th>Price</th><th>Stock</th><th>Harvested</th></tr>
+          ${data.products.map((p) => `<tr><td>${p.name}</td><td>${money(p.price)} / ${p.unit}</td><td>${p.stock}${p.stock < 15 ? " ⚠️" : ""}</td><td>${p.harvestedOn}</td></tr>`).join("")}
+        </table>
+        <p class="muted" style="margin-top:20px; font-size:0.85rem;">Commission model: Farm &amp; Family retains 15% of the sale price to cover logistics, cold-chain, marketing, and platform costs — the rest goes directly to you.</p>
+      `;
+    } catch (e) {
+      root.innerHTML = `<div class="empty-state">Couldn't load dashboard. ${e.message}</div>`;
+    }
+  }
+  init();
+</script>
+</body>
+</html>

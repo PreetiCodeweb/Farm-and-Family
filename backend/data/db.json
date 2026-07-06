@@ -1,0 +1,530 @@
+{
+  "farmers": [
+    {
+      "id": "f1",
+      "name": "Ramesh Patil",
+      "village": "Wai, Satara District",
+      "state": "Maharashtra",
+      "photo": "ramesh-patil.jpg",
+      "yearsFarming": 22,
+      "story": "Ramesh took over his family's 4-acre plot after his father's passing and converted it to organic strawberry and vegetable cultivation in 2015. He now mentors six neighbouring farmers on drip irrigation.",
+      "specialties": [
+        "Strawberries",
+        "Seasonal vegetables"
+      ],
+      "certifications": [
+        "FSSAI",
+        "India Organic (NPOP)"
+      ],
+      "rating": 4.8,
+      "totalOrders": 1240
+    },
+    {
+      "id": "f2",
+      "name": "Lakshmi Devi",
+      "village": "Kolar",
+      "state": "Karnataka",
+      "photo": "lakshmi-devi.jpg",
+      "yearsFarming": 15,
+      "story": "Lakshmi runs a women-led cooperative of 12 farms producing cold-pressed groundnut and sesame oil using traditional wooden ghani presses, preserving a method her grandmother used.",
+      "specialties": [
+        "Cold-pressed oils",
+        "Groundnuts"
+      ],
+      "certifications": [
+        "FSSAI"
+      ],
+      "rating": 4.9,
+      "totalOrders": 860
+    },
+    {
+      "id": "f3",
+      "name": "Gurpreet Singh",
+      "village": "Amritsar",
+      "state": "Punjab",
+      "photo": "gurpreet-singh.jpg",
+      "yearsFarming": 30,
+      "story": "Gurpreet's family has grown wheat and pulses on the same land for three generations. He recently added a natural jaggery unit powered by sugarcane grown on-site.",
+      "specialties": [
+        "Wheat",
+        "Pulses",
+        "Jaggery"
+      ],
+      "certifications": [
+        "FSSAI",
+        "PGS-India Green"
+      ],
+      "rating": 4.7,
+      "totalOrders": 2100
+    },
+    {
+      "id": "f4",
+      "name": "Meena Nair",
+      "village": "Wayanad",
+      "state": "Kerala",
+      "photo": "meena-nair.jpg",
+      "yearsFarming": 18,
+      "story": "Meena grows shade-tolerant spices — cardamom, pepper, and turmeric — under a native tree canopy, a method that keeps her small forest-farm biodiverse.",
+      "specialties": [
+        "Spices",
+        "Turmeric",
+        "Honey"
+      ],
+      "certifications": [
+        "India Organic (NPOP)",
+        "Fair Trade"
+      ],
+      "rating": 4.9,
+      "totalOrders": 640
+    },
+    {
+      "id": "f5",
+      "name": "Bhagwan Das",
+      "village": "Nashik",
+      "state": "Maharashtra",
+      "photo": "bhagwan-das.jpg",
+      "yearsFarming": 12,
+      "story": "Bhagwan's orchard produces table grapes and pomegranates. He pioneered a farmer WhatsApp group in his village that now shares weather alerts and market prices with 80+ members.",
+      "specialties": [
+        "Grapes",
+        "Pomegranates"
+      ],
+      "certifications": [
+        "FSSAI"
+      ],
+      "rating": 4.6,
+      "totalOrders": 980
+    }
+  ],
+  "categories": [
+    {
+      "id": "c1",
+      "name": "Fresh Fruits",
+      "slug": "fruits",
+      "icon": "🍓"
+    },
+    {
+      "id": "c2",
+      "name": "Seasonal Vegetables",
+      "slug": "vegetables",
+      "icon": "🥬"
+    },
+    {
+      "id": "c3",
+      "name": "Grains, Rice & Pulses",
+      "slug": "grains",
+      "icon": "🌾"
+    },
+    {
+      "id": "c4",
+      "name": "Spices & Herbs",
+      "slug": "spices",
+      "icon": "🌿"
+    },
+    {
+      "id": "c5",
+      "name": "Cold-Pressed Oils & Honey",
+      "slug": "oils-honey",
+      "icon": "🍯"
+    },
+    {
+      "id": "c6",
+      "name": "Pickles, Jams & Preserves",
+      "slug": "preserves",
+      "icon": "🫙"
+    },
+    {
+      "id": "c7",
+      "name": "Jaggery & Traditional Sweets",
+      "slug": "sweets",
+      "icon": "🍬"
+    },
+    {
+      "id": "c8",
+      "name": "Seeds, Saplings & Garden Supplies",
+      "slug": "garden",
+      "icon": "🌱"
+    },
+    {
+      "id": "c9",
+      "name": "Gift Boxes",
+      "slug": "gifts",
+      "icon": "🎁"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "name": "Wai Valley Organic Strawberries",
+      "categoryId": "c1",
+      "farmerId": "f1",
+      "price": 149,
+      "unit": "250g box",
+      "stock": 41,
+      "harvestedOn": "2026-07-05",
+      "farmFreshToday": true,
+      "images": [
+        "strawberries-1.jpg"
+      ],
+      "shortDescription": "Hand-picked this morning from Wai's strawberry belt — sweet, deep red, no wax coating.",
+      "description": "Grown without synthetic pesticides on Ramesh Patil's family farm in Wai, these strawberries are picked at first light and dispatched the same day through our cold-chain network. Best consumed within 3 days of delivery.",
+      "nutrition": {
+        "calories": 32,
+        "protein_g": 0.7,
+        "carbs_g": 7.7,
+        "fiber_g": 2,
+        "vitaminC_mgPer100g": 59
+      },
+      "storageInstructions": "Refrigerate at 2–4°C. Do not wash until ready to eat.",
+      "cultivationMethod": "Organic, mulch-bed cultivation, drip irrigation",
+      "qualityCertifications": [
+        "India Organic (NPOP)"
+      ],
+      "rating": 4.8,
+      "reviewCount": 132
+    },
+    {
+      "id": "p2",
+      "name": "Kolar Cold-Pressed Groundnut Oil",
+      "categoryId": "c5",
+      "farmerId": "f2",
+      "price": 320,
+      "unit": "1L bottle",
+      "stock": 75,
+      "harvestedOn": "2026-06-30",
+      "farmFreshToday": false,
+      "images": [
+        "groundnut-oil-1.jpg"
+      ],
+      "shortDescription": "Wood-pressed the traditional way — unrefined, aromatic, and rich in flavour.",
+      "description": "Pressed in small batches on a wooden ghani by Lakshmi Devi's women's cooperative in Kolar. No heat, no chemicals, no refining — just groundnuts and pressure.",
+      "nutrition": {
+        "calories": 884,
+        "fat_g": 100,
+        "saturatedFat_g": 17
+      },
+      "storageInstructions": "Store in a cool, dark place. Consume within 6 months of pressing.",
+      "cultivationMethod": "Traditional wooden ghani cold-pressing",
+      "qualityCertifications": [
+        "FSSAI"
+      ],
+      "rating": 4.9,
+      "reviewCount": 88
+    },
+    {
+      "id": "p3",
+      "name": "Amritsar Whole Wheat Atta",
+      "categoryId": "c3",
+      "farmerId": "f3",
+      "price": 210,
+      "unit": "5kg bag",
+      "stock": 119,
+      "harvestedOn": "2026-06-06",
+      "farmFreshToday": false,
+      "images": [
+        "wheat-atta-1.jpg"
+      ],
+      "shortDescription": "Stone-ground from Punjab wheat, harvested this season and milled fresh to order.",
+      "description": "Grown on Gurpreet Singh's family farm and stone-ground in small batches to preserve the wheat germ and natural sweetness. No bleaching, no additives.",
+      "nutrition": {
+        "calories": 340,
+        "protein_g": 12,
+        "carbs_g": 72,
+        "fiber_g": 11
+      },
+      "storageInstructions": "Store in an airtight container in a cool, dry place. Use within 3 months.",
+      "cultivationMethod": "Rain-fed, crop-rotated with pulses",
+      "qualityCertifications": [
+        "FSSAI",
+        "PGS-India Green"
+      ],
+      "rating": 4.7,
+      "reviewCount": 210
+    },
+    {
+      "id": "p4",
+      "name": "Wayanad Shade-Grown Turmeric",
+      "categoryId": "c4",
+      "farmerId": "f4",
+      "price": 180,
+      "unit": "200g pack",
+      "stock": 60,
+      "harvestedOn": "2026-06-22",
+      "farmFreshToday": false,
+      "images": [
+        "turmeric-1.jpg"
+      ],
+      "shortDescription": "Grown under native forest canopy in Wayanad — high curcumin, deep golden colour.",
+      "description": "Meena Nair grows this turmeric under a mixed native-tree canopy that keeps the soil biodiverse. Sun-dried and stone-ground without additives.",
+      "nutrition": {
+        "calories": 354,
+        "curcumin_percent": 4.2
+      },
+      "storageInstructions": "Store in an airtight jar away from direct sunlight.",
+      "cultivationMethod": "Shade-grown agroforestry, organic",
+      "qualityCertifications": [
+        "India Organic (NPOP)",
+        "Fair Trade"
+      ],
+      "rating": 4.9,
+      "reviewCount": 64
+    },
+    {
+      "id": "p5",
+      "name": "Nashik Table Grapes",
+      "categoryId": "c1",
+      "farmerId": "f5",
+      "price": 110,
+      "unit": "500g box",
+      "stock": 55,
+      "harvestedOn": "2026-07-04",
+      "farmFreshToday": true,
+      "images": [
+        "grapes-1.jpg"
+      ],
+      "shortDescription": "Seedless, crisp, and picked within the last 48 hours from Bhagwan's orchard.",
+      "description": "Bhagwan Das grows these seedless table grapes on trellises above the orchard floor for better airflow and fewer pesticide applications. Harvested early morning to lock in sweetness.",
+      "nutrition": {
+        "calories": 69,
+        "carbs_g": 18,
+        "sugar_g": 16
+      },
+      "storageInstructions": "Refrigerate immediately. Best within 4 days.",
+      "cultivationMethod": "Trellis-grown, integrated pest management",
+      "qualityCertifications": [
+        "FSSAI"
+      ],
+      "rating": 4.6,
+      "reviewCount": 47
+    },
+    {
+      "id": "p6",
+      "name": "Wild Forest Honey",
+      "categoryId": "c5",
+      "farmerId": "f4",
+      "price": 260,
+      "unit": "500g jar",
+      "stock": 38,
+      "harvestedOn": "2026-06-16",
+      "farmFreshToday": false,
+      "images": [
+        "honey-1.jpg"
+      ],
+      "shortDescription": "Raw, unfiltered honey harvested from wild hives in the Wayanad forest belt.",
+      "description": "Collected by tribal beekeeping partners working with Meena Nair's cooperative, this honey is raw and unfiltered — it may crystallise naturally, which is a sign of purity, not a flaw.",
+      "nutrition": {
+        "calories": 304,
+        "carbs_g": 82,
+        "sugar_g": 82
+      },
+      "storageInstructions": "Store at room temperature. Do not refrigerate.",
+      "cultivationMethod": "Wild forest foraging, hand-harvested",
+      "qualityCertifications": [
+        "Fair Trade"
+      ],
+      "rating": 4.8,
+      "reviewCount": 95
+    },
+    {
+      "id": "p7",
+      "name": "Punjab Jaggery Blocks",
+      "categoryId": "c7",
+      "farmerId": "f3",
+      "price": 140,
+      "unit": "1kg pack",
+      "stock": 90,
+      "harvestedOn": "2026-06-26",
+      "farmFreshToday": false,
+      "images": [
+        "jaggery-1.jpg"
+      ],
+      "shortDescription": "Made from farm-grown sugarcane, boiled in small batches the traditional way.",
+      "description": "Gurpreet Singh press-boils sugarcane grown on the same land as his wheat, producing jaggery with no chemical clarifiers.",
+      "nutrition": {
+        "calories": 383,
+        "carbs_g": 98,
+        "iron_mgPer100g": 11
+      },
+      "storageInstructions": "Store in an airtight container. Keep away from moisture.",
+      "cultivationMethod": "Farm-grown sugarcane, open-pan boiling",
+      "qualityCertifications": [
+        "FSSAI"
+      ],
+      "rating": 4.7,
+      "reviewCount": 58
+    },
+    {
+      "id": "p8",
+      "name": "Farm & Family Discovery Gift Box",
+      "categoryId": "c9",
+      "farmerId": "f1",
+      "price": 999,
+      "unit": "1 box (6 items)",
+      "stock": 25,
+      "harvestedOn": "2026-07-03",
+      "farmFreshToday": false,
+      "images": [
+        "gift-box-1.jpg"
+      ],
+      "shortDescription": "A curated box of honey, oil, jaggery, spices and a handwritten farmer note.",
+      "description": "Our most-gifted box: wild forest honey, cold-pressed groundnut oil, jaggery blocks, shade-grown turmeric, a jar of seasonal preserve, and a handwritten note from one of our partner farmers.",
+      "nutrition": null,
+      "storageInstructions": "See individual items inside.",
+      "cultivationMethod": "Multi-farm curated selection",
+      "qualityCertifications": [
+        "FSSAI"
+      ],
+      "rating": 4.9,
+      "reviewCount": 41
+    }
+  ],
+  "traceEvents": {
+    "p1": [
+      {
+        "stage": "Sown",
+        "date": "2026-04-22",
+        "location": "Wai, Satara District",
+        "note": "Runners planted on raised mulch beds."
+      },
+      {
+        "stage": "Growing",
+        "date": "2026-06-16",
+        "location": "Wai, Satara District",
+        "note": "Drip irrigation, hand-weeded, no synthetic pesticide applied."
+      },
+      {
+        "stage": "Harvested",
+        "date": "2026-07-05",
+        "location": "Wai, Satara District",
+        "note": "Hand-picked at 6:10 AM by Ramesh's team."
+      },
+      {
+        "stage": "Packed",
+        "date": "2026-07-05",
+        "location": "Wai Cold-Storage Hub",
+        "note": "Sorted, boxed, and chilled to 4°C within 90 minutes of harvest."
+      },
+      {
+        "stage": "In Transit",
+        "date": "2026-07-06",
+        "location": "Cold-chain van → Pune/Mumbai hub",
+        "note": "Temperature-logged transport."
+      }
+    ]
+  },
+  "users": [
+    {
+      "id": "AM3z9iVam1",
+      "name": "Preeti Sasmal",
+      "email": "sasmalpreeti@gmail.com",
+      "passwordHash": "$2a$10$ae.H5NdYZNoJ8lwfkGx1A.C/Qv.aiLvYqfrMvZyHzrXbfzGZ9cTU6",
+      "role": "customer",
+      "loyaltyPoints": 0,
+      "createdAt": "2026-07-06T16:36:41.662Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "FFWHQYZQWI",
+      "userId": "AM3z9iVam1",
+      "items": [
+        {
+          "productId": "p1",
+          "name": "Wai Valley Organic Strawberries",
+          "price": 149,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 149,
+      "deliveryFee": 40,
+      "total": 189,
+      "deliveryAddress": {
+        "name": "Preeti Sasmal",
+        "phone": "8777518526",
+        "address": "4/6 jadavgarh haltu kolkata 700078",
+        "city": "Kolkata",
+        "pin": "700078"
+      },
+      "paymentMethod": "cod",
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "at": "2026-07-06T16:41:53.000Z"
+        }
+      ],
+      "placedAt": "2026-07-06T16:41:53.000Z",
+      "estimatedDelivery": "2026-07-08"
+    },
+    {
+      "id": "FF-2GP_VRB",
+      "userId": "AM3z9iVam1",
+      "items": [
+        {
+          "productId": "p3",
+          "name": "Amritsar Whole Wheat Atta",
+          "price": 210,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 210,
+      "deliveryFee": 40,
+      "total": 250,
+      "deliveryAddress": {
+        "name": "Preeti Sasmal",
+        "phone": "8777518526",
+        "address": "hahahaha",
+        "city": "kolkata",
+        "pin": "700078"
+      },
+      "paymentMethod": "cod",
+      "status": "placed",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "at": "2026-07-06T16:53:15.435Z"
+        }
+      ],
+      "placedAt": "2026-07-06T16:53:15.435Z",
+      "estimatedDelivery": "2026-07-08"
+    }
+  ],
+  "carts": {
+    "guest-5nb3l3tpat": [
+      {
+        "productId": "p1",
+        "quantity": 1
+      }
+    ],
+    "guest-u0ot1llrg7": [],
+    "AM3z9iVam1": []
+  },
+  "wholesaleInquiries": [],
+  "newsletterSubscribers": [],
+  "reviews": [
+    {
+      "id": "r1",
+      "productId": "p1",
+      "user": "Anjali S.",
+      "rating": 5,
+      "comment": "Tasted like strawberries from my grandmother's garden. Arrived cold and fresh.",
+      "date": "2026-07-02"
+    },
+    {
+      "id": "r2",
+      "productId": "p3",
+      "user": "Vikram R.",
+      "rating": 5,
+      "comment": "Rotis puff up beautifully. Noticeably fresher than store atta.",
+      "date": "2026-06-24"
+    },
+    {
+      "id": "r3",
+      "productId": "p6",
+      "user": "Fatima K.",
+      "rating": 4,
+      "comment": "Crystallised a bit after a month but tastes completely raw and real.",
+      "date": "2026-06-27"
+    }
+  ]
+}
